@@ -56,7 +56,7 @@ const branchInfo = ref(null)
 const loading = ref(false)
 const errorMsg = ref('')
 
-// fetch branch info when component loads
+
 onMounted(async () => {
   loading.value = true
   try {

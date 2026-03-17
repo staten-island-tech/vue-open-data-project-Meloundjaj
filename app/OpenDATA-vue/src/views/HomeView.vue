@@ -15,7 +15,7 @@
     <!-- showing how many results -->
     <p v-if="branches.length > 0">Showing {{ filteredBranches.length }} branches</p>
 
-    <!-- passing branch as prop to BranchCard -->
+   
     <div class="grid">
       <BranchCard
         v-for="branch in filteredBranches"
@@ -55,7 +55,7 @@ async function loadAllBranches() {
   errorMsg.value = ''
   searchInput.value = ''
   try {
-    const res = await fetch('https://data.cityofnewyork.us/resource/3nja-bsch.json?$limit=50')
+    const res = await fetch('https://data.cityofnewyork.us/api/v3/views/3nja-bsch/query.json?$limit=50')
     if (!res.ok) {
       throw new Error('something went wrong')
     }
@@ -69,15 +69,17 @@ async function loadAllBranches() {
   loading.value = false
 }
 
+
 function searchBranches() {
-  // make sure search isnt empty
-  if (searchInput.value.trim() == '') {
-    errorMsg.value = 'Please enter a branch name'
-    return
-  }
-  errorMsg.value = ''
-  // filtering is handled by the computed property above
+   
+    if (searchInput.value.trim() == '') {
+        errorMsg.value = 'Please enter a branch name';
+        return;
+    }
+    errorMsg.value = '';
+    
 }
+
 </script>
 
 <style scoped>
