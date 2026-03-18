@@ -28,7 +28,7 @@ const branches = ref([])
 const loading = ref(false)
 const errorMsg = ref('')
 
-// lifecycle hook - load data when page loads
+
 onMounted(async () => {
   await getData()
   if (branches.value.length > 0) {
@@ -39,7 +39,14 @@ onMounted(async () => {
 async function getData() {
   loading.value = true
   try {
-    const res = await fetch('https://data.cityofnewyork.us/resource/3nja-bsch.json?$limit=50')
+   const res = await fetch(
+  'https://data.cityofnewyork.us/resource/3nja-bsch.json?$limit=50',
+  {
+    headers: {
+      'X-App-Token': 'APJ6r0raekjtRaPBN1UpTmMGr'
+    }
+  }
+)
     if (!res.ok) {
       throw new Error('failed to fetch: ' + res.status)
     }
@@ -54,7 +61,7 @@ async function getData() {
 }
 
 function makeCharts() {
-  // get top 10 branches by visits for bar chart
+
   const top10 = branches.value
     .filter(b => b.visits)
     .sort((a, b) => b.visits - a.visits)
@@ -63,7 +70,7 @@ function makeCharts() {
   const labels = top10.map(b => b.branch_name)
   const visitData = top10.map(b => Number(b.visits))
 
-  // bar chart
+ 
   const ctx1 = document.getElementById('barChart')
   new Chart(ctx1, {
     type: 'bar',
@@ -87,7 +94,6 @@ function makeCharts() {
     }
   })
 
-  // doughnut chart - top 6 by items circulated
   const top6 = branches.value
     .filter(b => b.items_circulated)
     .sort((a, b) => b.items_circulated - a.items_circulated)

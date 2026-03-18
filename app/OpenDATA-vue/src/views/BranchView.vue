@@ -60,7 +60,14 @@ const errorMsg = ref('')
 onMounted(async () => {
   loading.value = true
   try {
-    const res = await fetch(`https://data.cityofnewyork.us/resource/3nja-bsch.json?branch_name=${encodeURIComponent(props.name)}`)
+    const res = await fetch(
+  'https://data.cityofnewyork.us/resource/3nja-bsch.json?$limit=50',
+  {
+    headers: {
+      'X-App-Token': 'APJ6r0raekjtRaPBN1UpTmMGr'
+    }
+  }
+)
     if (!res.ok) {
       throw new Error('request failed')
     }

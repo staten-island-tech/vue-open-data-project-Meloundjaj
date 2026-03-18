@@ -2,7 +2,7 @@
   <div class="home">
     <h1>NYPL Manhattan Branches</h1>
 
-    <!-- search form -->
+    
     <div>
       <input type="text" v-model="searchInput" placeholder="search branch name..." />
       <button @click="searchBranches">Search</button>
@@ -12,7 +12,6 @@
     <p v-if="errorMsg" style="color: red;">{{ errorMsg }}</p>
     <p v-if="loading">Loading...</p>
 
-    <!-- showing how many results -->
     <p v-if="branches.length > 0">Showing {{ filteredBranches.length }} branches</p>
 
    
@@ -35,7 +34,7 @@ const loading = ref(false)
 const errorMsg = ref('')
 const searchInput = ref('')
 
-// computed property to filter branches by search
+
 const filteredBranches = computed(() => {
   if (searchInput.value == '') {
     return branches.value
@@ -45,7 +44,7 @@ const filteredBranches = computed(() => {
   )
 })
 
-// load all branches on page load
+
 onMounted(() => {
   loadAllBranches()
 })
@@ -55,13 +54,20 @@ async function loadAllBranches() {
   errorMsg.value = ''
   searchInput.value = ''
   try {
-    const res = await fetch('https://data.cityofnewyork.us/api/v3/views/3nja-bsch/query.json?$limit=50')
+  const res = await fetch(
+  'https://data.cityofnewyork.us/resource/3nja-bsch.json?$limit=50',
+  {
+    headers: {
+      'X-App-Token': 'APJ6r0raekjtRaPBN1UpTmMGr'
+    }
+  }
+)
     if (!res.ok) {
       throw new Error('something went wrong')
     }
     const data = await res.json()
     branches.value = data
-    console.log(data)
+    console.log(data[0])
   } catch (err) {
     console.log(err)
     errorMsg.value = 'Error loading data. Try again.'
