@@ -55,13 +55,9 @@ async function loadAllBranches() {
   searchInput.value = ''
   try {
   const res = await fetch(
-  'https://data.cityofnewyork.us/resource/3nja-bsch.json?$limit=50',
-  {
-    headers: {
-      'X-App-Token': 'APJ6r0raekjtRaPBN1UpTmMGr'
-    }
-  }
-)
+    'https://data.cityofnewyork.us/resource/3nja-bsch.json?$limit=50',)
+ 
+
     if (!res.ok) {
       throw new Error('something went wrong')
     }

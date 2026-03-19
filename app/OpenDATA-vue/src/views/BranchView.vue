@@ -47,41 +47,33 @@
 import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
-// route param passed as prop (bonus)
+
 const props = defineProps({
   name: String
 })
 
-const branchInfo = ref(null)
-const loading = ref(false)
-const errorMsg = ref('')
+const branchInfo = ref({branch_name: 'Your Branch'})
+const results =ref([])
 
 
-onMounted(async () => {
-  loading.value = true
+async function fetchbranchData() {
   try {
     const res = await fetch(
-  'https://data.cityofnewyork.us/resource/3nja-bsch.json?$limit=50',
-  {
-    headers: {
-      'X-App-Token': 'APJ6r0raekjtRaPBN1UpTmMGr'
-    }
-  }
-)
-    if (!res.ok) {
-      throw new Error('request failed')
-    }
+      `https://data.cityofnewyork.us/resource/3nja-bsch.json?branch=${encodeURIComponent(branchInfo.value.branch_name)}`,
+    )
+    
     const data = await res.json()
-    console.log(data)
-    if (data.length > 0) {
-      branchInfo.value = data[0]
-    }
+
+    results.value = data.slice(0, 5)
+    results.value = data[0]
+    results.value = data.filter(item => item.branch_name === props.name)
   } catch (err) {
-    errorMsg.value = 'Could not load branch info. ' + err.message
-    console.log(err)
+    console.log('Fetch error:', err)
+    errorMsg.value = 'Failed to load branch data: ' + err.message
+
   }
-  loading.value = false
-})
+}
+
 </script>
 
 <style scoped>

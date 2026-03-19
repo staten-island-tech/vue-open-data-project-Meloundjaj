@@ -21,31 +21,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import Chart from 'chart.js/auto'
 
-const branches = ref([])
-const loading = ref(false)
-const errorMsg = ref('')
-
-
-onMounted(async () => {
-  await getData()
-  if (branches.value.length > 0) {
-    makeCharts()
-  }
-})
 
 async function getData() {
   loading.value = true
   try {
    const res = await fetch(
-  'https://data.cityofnewyork.us/resource/3nja-bsch.json?$limit=50',
-  {
-    headers: {
-      'X-App-Token': 'APJ6r0raekjtRaPBN1UpTmMGr'
-    }
-  }
+
 )
     if (!res.ok) {
       throw new Error('failed to fetch: ' + res.status)
@@ -60,65 +42,8 @@ async function getData() {
   loading.value = false
 }
 
-function makeCharts() {
 
-  const top10 = branches.value
-    .filter(b => b.visits)
-    .sort((a, b) => b.visits - a.visits)
-    .slice(0, 10)
-
-  const labels = top10.map(b => b.branch_name)
-  const visitData = top10.map(b => Number(b.visits))
-
- 
-  const ctx1 = document.getElementById('barChart')
-  new Chart(ctx1, {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [{
-        label: 'Visits',
-        data: visitData,
-        backgroundColor: 'rgba(54, 162, 235, 0.5)',
-        borderColor: 'rgba(54, 162, 235, 1)',
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  })
-
-  const top6 = branches.value
-    .filter(b => b.items_circulated)
-    .sort((a, b) => b.items_circulated - a.items_circulated)
-    .slice(0, 6)
-
-  const ctx2 = document.getElementById('doughnutChart')
-  new Chart(ctx2, {
-    type: 'doughnut',
-    data: {
-      labels: top6.map(b => b.branch_name),
-      datasets: [{
-        label: 'Items Circulated',
-        data: top6.map(b => Number(b.items_circulated)),
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.7)',
-          'rgba(54, 162, 235, 0.7)',
-          'rgba(255, 206, 86, 0.7)',
-          'rgba(75, 192, 192, 0.7)',
-          'rgba(153, 102, 255, 0.7)',
-          'rgba(255, 159, 64, 0.7)'
-        ]
-      }]
-    }
-  })
-}
+  
 </script>
 
 <style scoped>
